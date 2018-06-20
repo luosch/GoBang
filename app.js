@@ -9,7 +9,9 @@ const config = require('./config/dev');
 const app = new Koa();
 
 const home = require('./routers/home');
-const user = require('./routers/user');
+const wallet = require('./routers/wallet');
+const game = require('./routers/game');
+const balance = require('./routers/balance');
 
 // logger
 app.use((ctx, next) => {
@@ -19,6 +21,9 @@ app.use((ctx, next) => {
         console.log(`${ctx.method} ${ctx.url} - ${ms}ms`);
     });
 });
+
+// static
+app.use(require('koa-static')(path.join(__dirname, 'static')));
 
 // Session
 app.keys = ['e1ea5111b13c6b4b010084b806abbc6a'];
@@ -36,7 +41,7 @@ app.use(bodyParser());
 // render
 render(app, {
   root: path.join(__dirname, 'views'),
-  layout: false,
+  layout: 'layout',
   viewExt: 'html',
   cache: false,
   debug: false
@@ -44,7 +49,9 @@ render(app, {
 
 // router
 app.use(home.routes(), home.allowedMethods());
-app.use(user.routes(), user.allowedMethods());
+app.use(wallet.routes(), wallet.allowedMethods());
+app.use(game.routes(), game.allowedMethods());
+app.use(balance.routes(), balance.allowedMethods());
 
 // listen
 app.listen(config.port);

@@ -1,0 +1,58 @@
+<form>
+  <div class="form-group">
+    <label>金额</label>
+    <input type="number" class="form-control" id="exampleInputEmail1" placeholder="Email">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+  </div>
+  <div class="form-group">
+    <label for="exampleInputFile">File input</label>
+    <input type="file" id="exampleInputFile">
+    <p class="help-block">Example block-level help text here.</p>
+  </div>
+  <div class="checkbox">
+    <label>
+      <input type="checkbox"> Check me out
+    </label>
+  </div>
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
+
+<script>
+  var NebPay = require("nebpay");
+  var nebPay = new NebPay();
+  var serialNumber;
+  var enableDebug = true;
+  var contractAdress = "n1kFbNTrWXzqy6thgL9kp459dXBjA5cf9Bc";
+ 
+  var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
+  neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"))
+
+  function listener(resp) {
+    console.log("resp: " + JSON.stringify(resp))
+  }
+
+  function getBalance() {
+    var walletAddress = "n1bCyxrgedZ9BG9NEnmLSYpcvYzofrhMsjE";
+    var value = "0";
+    var nonce = "0";
+    var gasPrice = "1000000"
+    var gasLimit = "2000000"
+    var callFunction = "balanceOf";
+    var callArgs = "";
+    var contract = {
+      "function": callFunction,
+      "args": callArgs
+    }
+
+    neb.api.call(walletAddress, contractAdress, value, nonce, gasPrice, gasLimit, contract).then(function (resp) {
+        console.log('resp', resp);
+    }).catch(function (err) {
+        console.log('err', err);
+    });
+  }
+
+  getBalance();
+</script>

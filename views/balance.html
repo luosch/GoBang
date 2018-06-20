@@ -1,0 +1,52 @@
+<% if (walletAddress) { %>
+<dl>
+  <dt>钱包地址：</dt>
+  <dd id="walletAddress"><%= walletAddress %></dd>
+</dl>
+<dl>
+  <dt>余额：</dt>
+  <dd id="balance">获取中</dd>
+</dl>
+<% } else { %>
+<h5>请设置钱包地址</h5>
+<% } %>
+
+<script>
+  var NebPay = require("nebpay");
+  var nebPay = new NebPay();
+  var serialNumber;
+  var enableDebug = true;
+  var contractAdress = "n1kFbNTrWXzqy6thgL9kp459dXBjA5cf9Bc";
+ 
+  var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
+  neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+  function listener(resp) {
+    console.log("resp: " + JSON.stringify(resp));
+  }
+
+  function getBalance() {
+    var walletAddress = $("#walletAddress").text();
+
+    if (walletAddress) {
+      var value = "0";
+      var nonce = "0";
+      var gasPrice = "1000000"
+      var gasLimit = "2000000"
+      var callFunction = "balanceOf";
+      var callArgs = "";
+      var contract = {
+        "function": callFunction,
+        "args": callArgs
+      }
+
+      neb.api.call(walletAddress, contractAdress, value, nonce, gasPrice, gasLimit, contract).then(function (resp) {
+          console.log('resp', JSON.stringify(resp));
+      }).catch(function (err) {
+          console.log('err', err);
+      });
+    }
+  }
+
+  getBalance();
+</script>

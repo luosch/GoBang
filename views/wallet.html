@@ -1,0 +1,25 @@
+<div class="input-group">
+  <span class="input-group-addon" id="sizing-addon3">钱包地址</span>
+
+  <% if (walletAddress) { %>
+    <input type="text" class="form-control" id="walletAddress" placeholder="输入钱包地址" value=<%= walletAddress %>>
+  <% } else { %>
+    <input type="text" class="form-control" id="walletAddress" placeholder="输入钱包地址">
+  <% } %>
+
+  <span class="input-group-btn">
+    <button class="btn btn-primary" type="button" id="setWalletButton">设置</button>
+  </span>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#setWalletButton').click(function () {
+      $.post('/wallet/setAddress', {
+        walletAddress: $('#walletAddress').val()
+      }, function (data) {
+        alert(data['message']);
+      })
+    });
+  });
+</script>

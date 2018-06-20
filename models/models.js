@@ -11,21 +11,14 @@ const sequelize = new Sequelize(config.db.database, config.db.username, config.d
   operatorsAliases: false
 })
 
-// 定义用户模型
-const User = sequelize.define('User', {
-  userId: Sequelize.STRING,
-  password: Sequelize.STRING,
-  createAt: Sequelize.DATE,
-  updateAt: Sequelize.DATE
-})
-
-User.sync()
-
 // 定义游戏模型
 const Game = sequelize.define('Game', {
   gameId: Sequelize.STRING,
   userAId: Sequelize.STRING,
+  userAMoney: Sequelize.FLOAT,
   userBId: Sequelize.STRING,
+  userBMoney: Sequelize.FLOAT,
+  end: Sequelize.BOOL,
   sequence: Sequelize.STRING,
   createAt: Sequelize.DATE,
   updateAt: Sequelize.DATE
@@ -35,6 +28,5 @@ Game.sync()
 
 module.exports = {
   orm: sequelize,
-  User: User,
   Game: Game
 }

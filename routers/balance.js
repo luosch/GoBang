@@ -1,12 +1,11 @@
 const Router = require('koa-router')
 
 let router = Router({
-  'prefix': '/game' 
+  'prefix': '/balance' 
 });
 
-
 router.get('/', async (ctx, next) => {
-  await ctx.render('game', {
+  await ctx.render('balance', {
     'walletAddress': ctx.session.walletAddress
   });
 });
