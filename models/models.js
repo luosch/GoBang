@@ -18,7 +18,7 @@ const Game = sequelize.define('Game', {
   userAMoney: Sequelize.FLOAT,
   userBId: Sequelize.STRING,
   userBMoney: Sequelize.FLOAT,
-  end: Sequelize.BOOL,
+  status: Sequelize.INT,
   sequence: Sequelize.STRING,
   createAt: Sequelize.DATE,
   updateAt: Sequelize.DATE

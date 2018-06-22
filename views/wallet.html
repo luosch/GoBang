@@ -1,25 +1,92 @@
-<div class="input-group">
-  <span class="input-group-addon" id="sizing-addon3">钱包地址</span>
-
-  <% if (walletAddress) { %>
-    <input type="text" class="form-control" id="walletAddress" placeholder="输入钱包地址" value=<%= walletAddress %>>
-  <% } else { %>
-    <input type="text" class="form-control" id="walletAddress" placeholder="输入钱包地址">
-  <% } %>
-
-  <span class="input-group-btn">
-    <button class="btn btn-primary" type="button" id="setWalletButton">设置</button>
-  </span>
-</div>
+<% if (walletAddress) { %>
+  <h5>钱包地址：<%= walletAddress %></h5>
+  <hr>
+  <button class="btn btn-danger" type="button" id="logout">注销</button>
+<% } else { %>  
+  <button class="btn btn-primary" type="button" id="login">登录</button>
+<% } %>
 
 <script>
-  $(document).ready(function () {
-    $('#setWalletButton').click(function () {
-      $.post('/wallet/setAddress', {
-        walletAddress: $('#walletAddress').val()
-      }, function (data) {
-        alert(data['message']);
-      })
-    });
+var NebPay = require("nebpay");
+var nebPay = new NebPay();
+var serialNumber;
+var intervalQuery;
+var enableDebug = true;
+var contractAdress = "n1kFbNTrWXzqy6thgL9kp459dXBjA5cf9Bc";
+
+// var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
+// neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"))
+
+function onLoginClick() {
+  var to = contractAdress;
+  var value = "0";
+  var callFunction = "save";
+  var callArgs = "[0]"
+  serialNumber = nebPay.call(to, value, callFunction, callArgs, {
+    qrcode: {
+      showQRCode: false
+    },
+    debug: enableDebug,
+    callback: NebPay.config.testnetUrl,
+    listener: function (resp) {
+      console.log("callback is " + resp)
+    }
   });
+
+  //设置定时查询交易结果
+  intervalQuery = setInterval(function() {
+    funcIntervalQuery();
+  }, 10000); //建议查询频率10-15s,因为星云链出块时间为15s,并且查询服务器限制每分钟最多查询10次。
+}
+
+function funcIntervalQuery() {   
+  //queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
+  nebPay.queryPayInfo(serialNumber, {
+    debug: enableDebug,
+    callback: NebPay.config.testnetUrl //在测试网查询
+  })
+  .then(function (resp) {
+    //resp is a JSON string
+    console.log("tx result: " + resp) 
+    var respObject = JSON.parse(resp)
+    //code == 0 交易发送成功, status == 1 交易已被打包上链
+    if (respObject.code === 0 && respObject.data.status === 1) {                    
+        //交易成功,处理后续任务....
+        let walletAddress = respObject["data"]["from"];
+
+        $.post('/wallet/login', {
+          walletAddress: walletAddress
+        }, function (data) {
+          alert(data['message']);
+          window.location.href = "/wallet";
+        })
+
+        clearInterval(intervalQuery)    //清除定时查询
+    }
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
+}
+
+function onLogoutClick() {
+  $.post('/wallet/logout', function (data) {
+    alert(data['message']);
+    window.location.href = "/wallet";
+  })
+}
+
+function listener(resp) {
+  console.log("resp: " + JSON.stringify(resp))
+}
+
+$(document).ready(function () {
+  $('#login').click(function () {
+    onLoginClick();
+  });
+
+  $('#logout').click(function () {
+    onLogoutClick();
+  });
+});
 </script>

@@ -47,6 +47,7 @@ BankVaultContract.prototype = {
     var deposit = new DepositeContent();
     deposit.balance = value;
     deposit.expiryHeight = bk_height.plus(height);
+    
 
     this.bankVault.put(from, deposit);
   },
@@ -84,10 +85,16 @@ BankVaultContract.prototype = {
     deposit.balance = deposit.balance.sub(amount);
     this.bankVault.put(from, deposit);
   },
+
+  transfer: function (value) {
+    
+  },
+
   balanceOf: function () {
     var from = Blockchain.transaction.from;
     return this.bankVault.get(from);
   },
+
   verifyAddress: function (address) {
     // 1-valid, 0-invalid
     var result = Blockchain.verifyAddress(address);

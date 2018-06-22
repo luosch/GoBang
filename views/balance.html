@@ -12,19 +12,20 @@
 <% } %>
 
 <script>
-  var NebPay = require("nebpay");
-  var nebPay = new NebPay();
-  var serialNumber;
-  var enableDebug = true;
-  var contractAdress = "n1kFbNTrWXzqy6thgL9kp459dXBjA5cf9Bc";
- 
-  var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
-  neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
+var NebPay = require("nebpay");
+var nebPay = new NebPay();
+var serialNumber;
+var enableDebug = true;
+var contractAdress = "n1kFbNTrWXzqy6thgL9kp459dXBjA5cf9Bc";
 
-  function listener(resp) {
-    console.log("resp: " + JSON.stringify(resp));
-  }
+var nebulas = require("nebulas"), Account = Account, neb = new nebulas.Neb();
+neb.setRequest(new nebulas.HttpRequest("https://testnet.nebulas.io"));
 
+function listener(resp) {
+  console.log("resp: " + JSON.stringify(resp));
+}
+
+$(document).ready(function () {
   function getBalance() {
     var walletAddress = $("#walletAddress").text();
 
@@ -40,8 +41,11 @@
         "args": callArgs
       }
 
-      neb.api.call(walletAddress, contractAdress, value, nonce, gasPrice, gasLimit, contract).then(function (resp) {
-          console.log('resp', JSON.stringify(resp));
+      neb.api.call(walletAddress, contractAdress, value, nonce, gasPrice, gasLimit, contract)
+      .then(function (resp) {
+        console.log('resp', resp);
+        var result = JSON.parse(resp["result"])
+        $("#balance").html("GAS: " + result["balance"]);
       }).catch(function (err) {
           console.log('err', err);
       });
@@ -49,4 +53,5 @@
   }
 
   getBalance();
+});
 </script>

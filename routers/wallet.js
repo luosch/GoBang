@@ -10,13 +10,22 @@ router.get('/', async (ctx, next) => {
   });
 });
 
-router.post('/setAddress', async (ctx, next) => {
+router.post('/login', async (ctx, next) => {
   let walletAddress = ctx.request.body['walletAddress'] || ''
   console.log('walletAddress', walletAddress)
   ctx.session.walletAddress = walletAddress
   ctx.body = {
     'status': 'success',
-    'message': '操作成功'
+    'message': '登录成功'
+  }
+});
+
+router.post('/logout', async (ctx, next) => {
+  ctx.session = null;
+
+  ctx.body = {
+    'status': 'success',
+    'message': '注销成功'
   }
 });
 
