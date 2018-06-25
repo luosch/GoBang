@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>五子棋</title>
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no;">
+  <link rel="stylesheet" href="/css/invate.css">
+</head>
+<body>
+
+<div id="main">
+  <button id="back"></button>
+  <div id="info">
+    <h3 id="title">邀请好友</h3>
+    <img src="/img/check.png" alt="check" id="check">
+    <p id="checkInfo">支付成功，你现在可以向好友发送对战邀请啦</p>
+  </div>
+  <div id="row1">
+    <p>复制链接发送好友，邀请好友点击应战</p>
+  </div>
+  <div id="row2">
+    <p><%= game.gameId %></p>
+    <button id="copyLink">复制</button>
+  </div>
+  <div id="row3">
+    <p>发送邀请后，即可进入游戏</p>  
+  </div>
+  <div id="row4">
+    <button id="enterGame">进入游戏</button>
+  </div>
+</div>
+
+<script src="/js/axios.min.js"></script>
+<script src="/js/invate.js"></script>
+</body>
+</html>

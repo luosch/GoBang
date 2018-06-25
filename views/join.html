@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>五子棋</title>
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no;">
+  <link rel="stylesheet" href="/css/join.css">
+</head>
+<body>
+
+<div id="main">
+  <div class="bg"></div>
+  <button id="close"></button>
+  <div id="content">
+    <p id="gameInfo">您好友"昵称"向你发起了NAS五子棋挑战</p>
+    <input type="text" placeholder="我的昵称" id="nicknameInput">
+    <div id="moneyInputGroup">
+      <input type="text" placeholder="对战金额" id="moneyInput">
+      <span id="moneyUnit">NAS</span>
+    </div>
+    <button id="acceptChallenge">接受挑战</button>
+    <p id="acceptChallengeInfo">挑战者已支付对战金额，您需支付同等对战金额后方可进入游戏对战，对战双方中获胜者获得全部对战金额</p>
+  </div>
+</div>
+
+<script src="/js/axios.min.js"></script>
+<script src="/js/join.js"></script>
+</body>
+</html>

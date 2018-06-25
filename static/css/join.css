@@ -1,0 +1,124 @@
+html, body {
+	width: 100%;
+	height: 100%;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: Avenir,Helvetica,Arial,sans-serif;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+	color: #2c3e50;
+}
+
+#close {
+	position: absolute;
+	background-color: rgba(0, 0, 0, 0);
+	background-image: url("../img/close.png");
+	background-repeat: no-repeat;
+	background-size: 16px 16px;
+	background-position: center;
+	border: none;
+	padding: 0;
+	width: 22px;
+	height: 22px;
+	top: 15px;
+	left: 15px;
+	z-index: 1001;
+}
+
+.bg {
+	position: absolute;
+	display: inline-block;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+}
+
+#main .bg {
+	background-color: #ffffff;
+}
+
+#main input {
+	display: block;
+	width: 87.2%;
+	height: 44px;
+	margin: 0 auto;
+	border: 1px solid #C59A6E;
+	padding-left: 10px;
+	font-size: 15px;
+	outline: none;
+}
+
+#main ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #E2CCB6;
+  opacity: 1; /* Firefox */
+}
+
+#main :-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #E2CCB6;
+}
+
+#main ::-ms-input-placeholder { /* Microsoft Edge */
+  color: #E2CCB6;
+}
+
+#main #content {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+#content #gameInfo {
+	display: block;
+	font-size: 15px;
+	color: #000000;
+	line-height: 21px;
+	width: 88%;
+	margin: 79px auto 0;
+	padding: 0;
+}
+
+#nicknameInput {
+	margin-top: 12px !important;
+	margin-bottom: 20px !important;
+}
+
+#moneyInput {
+	margin-bottom: 60px !important;
+}
+
+#moneyInputGroup {
+	position: relative;
+}
+
+#moneyInputGroup #moneyUnit {
+	position: absolute;
+	right: 8%;
+	top: 13.5px;
+	line-height: 21px;
+	color: #C59A6E;
+}
+
+#acceptChallenge {
+	display: block;
+	width: 87.2%;
+	height: 44px;
+	border: 1px solid #C59A6E;
+	background-color: #C59A6E;
+	color: #ffffff;
+	font-size: 15px;
+	margin: 0 auto;
+	outline: none;
+}
+
+#acceptChallengeInfo {
+	width: 87.2%;
+	margin: 12px auto;
+	font-size: 15px;
+	line-height: 21px;
+}

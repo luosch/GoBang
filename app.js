@@ -41,7 +41,7 @@ app.use(bodyParser());
 // render
 render(app, {
   root: path.join(__dirname, 'views'),
-  layout: 'layout',
+  layout: false,
   viewExt: 'html',
   cache: false,
   debug: false
@@ -49,9 +49,7 @@ render(app, {
 
 // router
 app.use(home.routes(), home.allowedMethods());
-app.use(wallet.routes(), wallet.allowedMethods());
 app.use(game.routes(), game.allowedMethods());
-app.use(balance.routes(), balance.allowedMethods());
 
 // listen
 app.listen(config.port);

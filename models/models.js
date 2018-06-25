@@ -1,5 +1,5 @@
-const Sequelize = require('sequelize')
-const config = require('../config/dev')
+const Sequelize = require('sequelize');
+const config = require('../config/dev');
 
 // 数据库操作实例
 const sequelize = new Sequelize(config.db.database, config.db.username, config.db.password, {
@@ -9,22 +9,24 @@ const sequelize = new Sequelize(config.db.database, config.db.username, config.d
   pool: config.db.pool,
 
   operatorsAliases: false
-})
+});
 
 // 定义游戏模型
 const Game = sequelize.define('Game', {
   gameId: Sequelize.STRING,
-  userAId: Sequelize.STRING,
-  userAMoney: Sequelize.FLOAT,
-  userBId: Sequelize.STRING,
-  userBMoney: Sequelize.FLOAT,
-  status: Sequelize.INT,
+  blackId: Sequelize.STRING,
+  blackNickName: Sequelize.STRING,
+  blackBet: Sequelize.FLOAT,
+  whiteId: Sequelize.STRING,
+  whiteNickName: Sequelize.STRING,
+  whiteBet: Sequelize.FLOAT,
+  status: Sequelize.INTEGER,
   sequence: Sequelize.STRING,
   createAt: Sequelize.DATE,
   updateAt: Sequelize.DATE
-})
+});
 
-Game.sync()
+Game.sync();
 
 module.exports = {
   orm: sequelize,

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>五子棋</title>
+  <meta charset="UTF-8">
+  <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no;">
+  <link rel="stylesheet" href="/css/home.css">
+</head>
+<body>
+
+<div id="main">
+  <img src="/img/bg.png" alt="bg" class="bg">
+  <div id="buttonList">
+    <button class="homeButton" id="challenge"></button>
+    <button class="homeButton" id="help"></button>  
+  </div>
+</div>
+
+<div id="helpInfo" class="hidden">
+  <img src="/img/help-bg.png" alt="bg" class="bg">
+  <button id="closeHelpInfo"></button>
+  <div id="helpContent">
+    <h3 id="title">游戏说明</h3>
+    <ul>
+      <li>【 游戏说明 】</li>
+      <li>1. NAS五子棋是一款基于星云链的五子棋在线对战游戏</li>
+      <li>2. 挑战者投注对战金额并向好友发起挑战，好友投注同样对战金额并接受挑战</li>
+      <li>3. 挑战者执黑子，应战者执白子，游戏未开始前，双方可选择取消对战，对应投注金额将返回各自NAS官方钱包</li>
+      <li>4. 应战者接受挑战进入游戏后，如果3分钟内挑战者未下第一个子，则自动取消游戏，对应投注金额将返回各自NAS官方钱包</li>
+      <li>5. 比赛结果分胜、负、平，其中平局为棋盘下满但未有结果</li>
+      <li>6. 对局开始后，某方一分钟内未操作则判定为负</li>
+      <li>7. 对战双方中获胜者获得全部投注金额</li>
+      <li>8. 支付对战金额且游戏结束后平台将收取1%手续费</li>
+    </ul>
+  </div>
+</div>
+
+<div id="challengeInfo" class="hidden1">
+  <div class="bg"></div>
+  <button id="closeChallengeInfo"></button>
+  <div id="challengeContent">
+    <h3 id="title">挑战好友</h3>
+    <input type="text" placeholder="我的昵称" id="nicknameInput">
+    <div id="moneyInputGroup">
+      <input type="text" placeholder="对战金额" id="moneyInput">
+      <span id="moneyUnit">NAS</span>
+    </div>
+    <button id="submitChallenge">发起挑战</button>
+    <p id="submitChallengeInfo">应战好友接受挑战并支付同样对战金额后进入游戏对战，对战双方中获胜者获得全部对战金额</p>
+  </div>
+</div>
+
+<script src="/js/axios.min.js"></script>
+<script src="/js/home.js"></script>
+</body>
+</html>
