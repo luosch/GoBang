@@ -8,24 +8,17 @@ let router = Router({
 
 // 创建游戏
 router.post('/add', async (ctx, next) => {
-  console.log("ctx.request.body", ctx.request.body);
+  let gameId = ctx.request.body['gameId'] || '';
   let blackId = ctx.request.body['blackId'] || '';
   let blackNickName = ctx.request.body['blackNickName'] || '';
   let blackBet = ctx.request.body['blackBet'] || '';
   blackBet = parseFloat(blackBet);
-
-  let date = new Date();
-
-  let games = await Game.findAll();
-  let gameId = md5(games.length+Date.now());
 
   await Game.create({
     'gameId': gameId,
     'blackId': blackId,
     'blackNickName': blackNickName,
     'blackBet': blackBet,
-    'createAt': date,
-    'updateAt': date,
     'status': 1
   })
 
@@ -49,12 +42,38 @@ router.get('/match/:id', async (ctx, next) => {
 
 // 加入游戏
 router.post('/join', async (ctx, next) => {
-  // let userId = ctx.request.body['userId'] || ''
-  // let password = ctx.request.body['password'] || ''
-
   console.log("ctx.request.body", ctx.request.body);
+  let gameId = ctx.request.body['gameId'] || '';
+  let whiteId = ctx.request.body['whiteId'] || '';
+  let whiteNickName = ctx.request.body['whiteNickName'] || '';
+  let whiteBet = ctx.request.body['whiteBet'] || '';
+
+  let games = await Game.findAll({ 
+    where: { 
+      gameId: gameId
+    }
+  });
+
+  if (games.length > 0) {
+    let game = games[0]
+
+    await game.update({
+      'whiteId': whiteId,
+      'whiteNickName': whiteNickName,
+      'whiteBet': whiteBet,
+      'status': 2,
+      'updateAt': new Date()
+    })
+
+    ctx.body = {
+      'status': 'success',
+      'message': '加入成功'
+    }
+    return;
+  }
+
   ctx.body = {
-    'status': 'fail',
+    'status': 'success',
     'message': '操作失败'
   }
 });

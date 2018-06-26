@@ -83,6 +83,11 @@ body {
 	padding: 0;
 }
 
+#content #gameInfo span {
+	font-weight: bold;
+	margin: 0 5px;
+}
+
 #nicknameInput {
 	margin-top: 12px !important;
 	margin-bottom: 20px !important;

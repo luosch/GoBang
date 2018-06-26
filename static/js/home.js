@@ -1,3 +1,13 @@
+var NebPay = require("nebpay");
+var nebPay = new NebPay();
+var serialNumber;
+var gameId;
+var intervalQueryId;
+var enableDebug = true;
+var contractAdress = "n1irwPQtSUUTRt8bVRZLNdK2nKWq5RDciTb";
+var callback = NebPay.config.testnetUrl;
+var GasToNas = 1e18;
+
 function toggle(el, className) {
   if (el.classList) {
     el.classList.toggle(className);
@@ -30,23 +40,73 @@ function toggleChallengeInfo() {
 
 // 发起挑战
 function issueChallenge() {
-  // axios.post('/game/add', {
-  //   blackId: 'testBlackId',
-  //   blackNickName: 'testBlackName',
-  //   blackBet: 15.0
-  // })
-  // .then(function (response) {
-  //   console.log(response);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
+  var moneyInput = document.getElementById("moneyInput").value;
+  var nickname = document.getElementById("nicknameInput").value;
+  gameId = md5(nickname+Date.now());
+  var to = contractAdress;
+  var value = moneyInput;
+  var callFunction = "startChallenge";
+  var callArgs = "[\"" + gameId + "\"]"
+  serialNumber = nebPay.call(to, value, callFunction, callArgs, {
+    qrcode: {
+      showQRCode: false
+    },
+    debug: enableDebug,
+    callback: callback,
+    listener: function (resp) {
+      console.log("callback is " + resp)
+    }
+  });
 
-  
+  // 设置定时查询交易结果
+  // 建议查询频率10-15s, 因为星云链出块时间为15s, 并且查询服务器限制每分钟最多查询10次。
+  intervalQueryId = setInterval(function() {
+    intervalQuery();
+  }, 1000 * 10);
 }
 
 
-window.onload = function (argument) {
+function intervalQuery() {   
+  // queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
+  nebPay.queryPayInfo(serialNumber, {
+    debug: enableDebug,
+    callback: NebPay.config.testnetUrl //在测试网查询
+  })
+  .then(function (resp) {
+    //resp is a JSON string
+    console.log("tx result: " + resp) 
+    var respObject = JSON.parse(resp)
+    //code == 0 交易发送成功, status == 1 交易已被打包上链
+    if (respObject.code === 0 && respObject.data.status === 1) {
+        var walletAddress = respObject["data"]["from"];
+        var value = respObject["data"]["value"];
+        var nickname = document.getElementById("nicknameInput").value;
+        
+        console.log('walletAddress', walletAddress, parseFloat(value) / GasToNas, nickname, gameId);
+        
+        axios.post("/game/add", {
+          "gameId": gameId,
+          "blackId": walletAddress,
+          "blackNickName": nickname,
+          "blackBet": parseFloat(value) / GasToNas
+        })
+        .then(function (response) {
+          alert("创建成功");
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        clearInterval(intervalQueryId)    //清除定时查询
+    }
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
+}
+
+window.onload = function () {
   document.getElementById("help").addEventListener("click", toggleHelpInfo);
   document.getElementById("closeHelpInfo").addEventListener("click", toggleHelpInfo);
 

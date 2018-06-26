@@ -40,19 +40,19 @@ function onLoginClick() {
 }
 
 function funcIntervalQuery() {   
-  //queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
+  // queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
   nebPay.queryPayInfo(serialNumber, {
     debug: enableDebug,
-    callback: NebPay.config.testnetUrl //在测试网查询
+    callback: NebPay.config.testnetUrl
   })
   .then(function (resp) {
     //resp is a JSON string
     console.log("tx result: " + resp) 
     var respObject = JSON.parse(resp)
     //code == 0 交易发送成功, status == 1 交易已被打包上链
-    if (respObject.code === 0 && respObject.data.status === 1) {                    
-        //交易成功,处理后续任务....
-        let walletAddress = respObject["data"]["from"];
+    if (respObject.code === 0 && respObject.data.status === 1) {
+        var walletAddress = respObject["data"]["from"];
+        var value = respObject["data"]["value"];
 
         $.post('/wallet/login', {
           walletAddress: walletAddress

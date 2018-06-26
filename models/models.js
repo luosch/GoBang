@@ -21,9 +21,7 @@ const Game = sequelize.define('Game', {
   whiteNickName: Sequelize.STRING,
   whiteBet: Sequelize.FLOAT,
   status: Sequelize.INTEGER,
-  sequence: Sequelize.STRING,
-  createAt: Sequelize.DATE,
-  updateAt: Sequelize.DATE
+  sequence: Sequelize.STRING
 });
 
 Game.sync();

@@ -44,4 +44,20 @@ router.get('/join', async (ctx, next) => {
   ctx.body = 'not found';
 });
 
+router.get('/match/:id', async (ctx, next) => {
+  if (ctx.params.id) {
+    let games = await Game.findAll({ 
+      where: { 
+        gameId: ctx.params.id
+      }
+    });
+    await ctx.render('match', {
+      game: games[0]
+    });
+    return
+  }
+
+  ctx.body = 'not found';
+});
+
 module.exports = router;

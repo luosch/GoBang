@@ -1,26 +1,31 @@
 'use strict';
 
-var DepositeContent = function (text) {
+var Bet = function (text) {
   if (text) {
     var o = JSON.parse(text);
-    this.balance = new BigNumber(o.balance);
-    this.expiryHeight = new BigNumber(o.expiryHeight);
+    this.gameId = o.gameId;
+    this.blackId = o.blackId;
+    this.whiteId = o.whiteId;
+    this.money = new BigNumber(o.money);
+    this.status = o.status;
   } else {
-    this.balance = new BigNumber(0);
-    this.expiryHeight = new BigNumber(0);
+    this.gameId = '';
+    this.blackId = '';
+    this.whiteId = '';
+    this.money = new BigNumber(0);
+    this.status = 0;
   }
 };
-
-DepositeContent.prototype = {
+Bet.prototype = {
   toString: function () {
     return JSON.stringify(this);
-  }
+  },
 };
 
-var BankVaultContract = function () {
-  LocalContractStorage.defineMapProperty(this, "bankVault", {
+var GoBangContract = function () {
+  LocalContractStorage.defineMapProperty(this, "dataMap", {
     parse: function (text) {
-      return new DepositeContent(text);
+      return new Bet(text);
     },
     stringify: function (o) {
       return o.toString();
@@ -28,71 +33,91 @@ var BankVaultContract = function () {
   });
 };
 
-// save value to contract, only after height of block, users can takeout
-BankVaultContract.prototype = {
+GoBangContract.prototype = {
   init: function () {
-    //TODO:
+    
   },
 
-  save: function (height) {
+  startChallenge: function (gameId) {
     var from = Blockchain.transaction.from;
     var value = Blockchain.transaction.value;
-    var bk_height = new BigNumber(Blockchain.block.height);
 
-    var orig_deposit = this.bankVault.get(from);
-    if (orig_deposit) {
-      value = value.plus(orig_deposit.balance);
+    var orig_bet = this.dataMap.get(gameId);
+    if (orig_bet) {
+      throw new Error("Bet Exists.");
     }
 
-    var deposit = new DepositeContent();
-    deposit.balance = value;
-    deposit.expiryHeight = bk_height.plus(height);
-    
+    var bet = new Bet();
+    bet.gameId = gameId;
+    bet.blackId = from;
+    bet.money = value;
+    bet.status = 1;
 
-    this.bankVault.put(from, deposit);
+    this.dataMap.put(gameId, bet);
   },
 
-  takeout: function (value) {
+  acceptChallenge: function (gameId) {
     var from = Blockchain.transaction.from;
-    var bk_height = new BigNumber(Blockchain.block.height);
-    var amount = new BigNumber(value);
+    var value = Blockchain.transaction.value;
 
-    var deposit = this.bankVault.get(from);
-    if (!deposit) {
-      throw new Error("No deposit before.");
+    var bet = this.dataMap.get(gameId);
+
+    if (!bet) {
+      throw new Error("Bet Not Exists.");
     }
 
-    if (bk_height.lt(deposit.expiryHeight)) {
-      throw new Error("Can not takeout before expiryHeight.");
+    if (bet.status != 1) {
+      throw new Error("Wrong Status."); 
     }
 
-    if (amount.gt(deposit.balance)) {
-      throw new Error("Insufficient balance.");
+    bet.whiteId = from;
+    bet.money = bet.money.plus(value);
+    bet.status = 2;
+
+    this.dataMap.put(gameId, bet);
+  },
+
+  endGame: function(gameId, status) {
+    var from = Blockchain.transaction.from;
+    var bet = this.dataMap.get(gameId);
+    
+    if (!bet) {
+      throw new Error("No Bet Before.");
     }
 
-    var result = Blockchain.transfer(from, amount);
+    var amount = bet.money;
+    var winnerId = '';
+
+    // TODO: status == 3
+    if (status == 4) {
+      winnerId = bet.blackId;
+      bet.status = 4;
+    } else if (status == 5) {
+      winnerId = bet.whiteId;
+      bet.status = 5;
+    } else {
+      throw new Error("Wrong Status.");
+    }
+
+    var result = Blockchain.transfer(winnerId, amount);
     if (!result) {
       throw new Error("transfer failed.");
     }
-    Event.Trigger("BankVault", {
+
+    Event.Trigger("GoBang", {
       Transfer: {
         from: Blockchain.transaction.to,
-        to: from,
+        to: winnerId,
         value: amount.toString()
       }
     });
 
-    deposit.balance = deposit.balance.sub(amount);
-    this.bankVault.put(from, deposit);
+    bet.money = bet.money.sub(amount);
+    this.dataMap.put(gameId, bet);
   },
 
-  transfer: function (value) {
-    
-  },
-
-  balanceOf: function () {
-    var from = Blockchain.transaction.from;
-    return this.bankVault.get(from);
+  info: function (gameId) {
+    return this.dataMap.get(gameId);
   },
 
   verifyAddress: function (address) {
@@ -102,5 +127,6 @@ BankVaultContract.prototype = {
       valid: result == 0 ? false : true
     };
   }
+
 };
-module.exports = BankVaultContract;
+module.exports = GoBangContract;
