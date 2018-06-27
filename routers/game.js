@@ -22,6 +22,8 @@ router.post('/add', async (ctx, next) => {
     'status': 1
   })
 
+  ctx.session.walletAddress = blackId
+  
   ctx.body = {
     'status': 'success',
     'message': '创建成功'
