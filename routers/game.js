@@ -115,7 +115,6 @@ router.post('/end/:id', async (ctx, next) => {
 
 // 加入游戏
 router.post('/join', async (ctx, next) => {
-  console.log("ctx.request.body", ctx.request.body);
   let gameId = ctx.request.body['gameId'] || '';
   let whiteId = ctx.request.body['whiteId'] || '';
   let whiteNickName = ctx.request.body['whiteNickName'] || '';

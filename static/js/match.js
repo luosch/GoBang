@@ -118,6 +118,7 @@ function gameQuery() {
   axios.get("/game/info/"+gameId)
   .then(function (response) {
     seq = response["data"]["sequence"] || '';
+    var status = response["data"]["status"];
     console.log("seq", seq);
 
     drawPieces(seq);
@@ -126,6 +127,16 @@ function gameQuery() {
     } else if (IS_WHITE) {
       IS_CAN_STEP = seq.split(";").length % 2 == 1;
     }
+
+    setTimeout(function () {
+      if (status == 4) {
+        alert("黑棋胜利，游戏结束!");
+        clearInterval(intervalId);
+      } else if (status == 5) {
+        alert("白棋胜利，游戏结束!");
+        clearInterval(intervalId);
+      }
+    }, 1*1000);
   })
   .catch(function (error) {
     console.log(error);
@@ -213,6 +224,7 @@ function isOver(x, y, sum) {
         endChallenge("4");
       } else {
         alert("白棋胜利，游戏结束!");
+        endChallenge("5");
       }
     }, 0);
   }
@@ -344,10 +356,8 @@ window.onload = function () {
     IS_WHITE = true
   }
 
-  gameQuery();
   intervalId = setInterval(gameQuery, 5*1000);
-
-  // clearInterval(interval);
+  gameQuery();
 
   drawChessBoard();
 

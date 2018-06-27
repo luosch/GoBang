@@ -92,10 +92,11 @@ function intervalQuery() {
         })
         .then(function (response) {
           console.log(response);
-          alert(response["data"]["message"]);
+          alert("跳转到邀请页面");
           window.location.href = "/invate?userId=" + walletAddress;
         })
         .catch(function (error) {
+          alert("创建失败");
           console.log(error);
         });
 

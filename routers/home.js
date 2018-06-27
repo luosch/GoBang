@@ -10,7 +10,8 @@ router.get('/invate', async (ctx, next) => {
   if (ctx.query.userId) {
     let games = await Game.findAll({ 
       where: { 
-        blackId: ctx.query.userId
+        blackId: ctx.query.userId,
+        status: [1, 2]
       }
     });
 
@@ -29,7 +30,8 @@ router.get('/join', async (ctx, next) => {
   if (ctx.query.gameId) {
     let games = await Game.findAll({ 
       where: { 
-        gameId: ctx.query.gameId
+        gameId: ctx.query.gameId,
+        status: [1, 2]
       }
     });
 
