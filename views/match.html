@@ -10,10 +10,20 @@
 
 <div id="main">
   <img src="/img/bg.png" alt="bg" class="bg">
+  <div id="info">
+    <h5>黑: <%=game.blackNickName%></h5>
+    <h5>白: <%=game.whiteNickName%></h5>
+  </div>
   <canvas id="chessboard"></canvas>
+  <input id="gameId" type="hidden" value=<%= game.gameId %>>
+  <input id="blackId" type="hidden" value=<%= game.blackId %>>
+  <input id="whiteId" type="hidden" value=<%= game.whiteId %>>
+  <input id="userId" type="hidden" value=<%= userId %>>
 </div>
 
 <script src="/js/axios.min.js"></script>
+<script src="/js/nebPay.min.js"></script>
+<script src="/js/nebulas.js"></script>
 <script src="/js/match.js"></script>
 </body>
 </html>

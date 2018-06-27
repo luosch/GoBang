@@ -4,35 +4,22 @@ var serialNumber;
 var gameId;
 var intervalQueryId;
 var enableDebug = true;
-var contractAdress = "n1irwPQtSUUTRt8bVRZLNdK2nKWq5RDciTb";
+var contractAdress = "n1qgUaxkar6p4LtGYR6i4ixkpqhvSNpZUFL";
 var callback = NebPay.config.testnetUrl;
 var GasToNas = 1e18;
 
 
 // 发起挑战
 function joinChallenge() {
-  // axios.post('/game/join', {
-  //   gameId: document.getElementById('gameId').value,
-  //   whiteId: 'testWhiteId',
-  //   whiteNickName: 'testWhiteName',
-  //   whiteBet: 15.0
-  // })
-  // .then(function (response) {
-  //   console.log(response);
-  // })
-  // .catch(function (error) {
-  //   console.log(error);
-  // });
   var moneyInput = document.getElementById("moneyInput").value;
-  var nickname = document.getElementById("nicknameInput").value;
-  gameId = md5(nickname+Date.now());
+  gameId = document.getElementById("gameId").value;
   var to = contractAdress;
   var value = moneyInput;
-  var callFunction = "startChallenge";
+  var callFunction = "acceptChallenge";
   var callArgs = "[\"" + gameId + "\"]"
   serialNumber = nebPay.call(to, value, callFunction, callArgs, {
     qrcode: {
-      showQRCode: true
+      showQRCode: false
     },
     debug: enableDebug,
     callback: callback,
@@ -46,6 +33,47 @@ function joinChallenge() {
   intervalQueryId = setInterval(function() {
     intervalQuery();
   }, 1000 * 10);
+}
+
+function intervalQuery() {   
+  // queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
+  nebPay.queryPayInfo(serialNumber, {
+    debug: enableDebug,
+    callback: NebPay.config.testnetUrl //在测试网查询
+  })
+  .then(function (resp) {
+    //resp is a JSON string
+    console.log("tx result: " + resp) 
+    var respObject = JSON.parse(resp)
+    //code == 0 交易发送成功, status == 1 交易已被打包上链
+    if (respObject.code === 0 && respObject.data.status === 1) {
+        var walletAddress = respObject["data"]["from"];
+        var value = respObject["data"]["value"];
+        var nickname = document.getElementById("nicknameInput").value;
+        
+        console.log('walletAddress', walletAddress, parseFloat(value) / GasToNas, nickname, gameId);
+        
+        axios.post("/game/join", {
+          "gameId": gameId,
+          "whiteId": walletAddress,
+          "whiteNickName": nickname,
+          "whiteBet": parseFloat(value) / GasToNas
+        })
+        .then(function (response) {
+          console.log(response);
+          alert(response["data"]["message"]);
+          window.location.href = "/match/" + gameId;
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+
+        clearInterval(intervalQueryId)    //清除定时查询
+    }
+  })
+  .catch(function (err) {
+    console.log(err);
+  });
 }
 
 window.onload = function () {

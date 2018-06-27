@@ -4,7 +4,7 @@ var serialNumber;
 var gameId;
 var intervalQueryId;
 var enableDebug = true;
-var contractAdress = "n1irwPQtSUUTRt8bVRZLNdK2nKWq5RDciTb";
+var contractAdress = "n1qgUaxkar6p4LtGYR6i4ixkpqhvSNpZUFL";
 var callback = NebPay.config.testnetUrl;
 var GasToNas = 1e18;
 
@@ -91,8 +91,9 @@ function intervalQuery() {
           "blackBet": parseFloat(value) / GasToNas
         })
         .then(function (response) {
-          alert("创建成功");
           console.log(response);
+          alert(response["data"]["message"]);
+          window.location.href = "/invate?userId=" + walletAddress;
         })
         .catch(function (error) {
           console.log(error);

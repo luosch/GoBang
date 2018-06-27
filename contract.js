@@ -66,10 +66,6 @@ GoBangContract.prototype = {
       throw new Error("Bet Not Exists.");
     }
 
-    if (bet.status != 1) {
-      throw new Error("Wrong Status."); 
-    }
-
     bet.whiteId = from;
     bet.money = bet.money.plus(value);
     bet.status = 2;

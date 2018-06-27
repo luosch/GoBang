@@ -51,10 +51,14 @@ router.get('/match/:id', async (ctx, next) => {
         gameId: ctx.params.id
       }
     });
-    await ctx.render('match', {
-      game: games[0]
-    });
-    return
+
+    if (games.length > 0 && ctx.session.userId) {
+      await ctx.render('match', {
+        game: games[0],
+        userId: ctx.session.userId
+      });
+      return;
+    }
   }
 
   ctx.body = 'not found';
