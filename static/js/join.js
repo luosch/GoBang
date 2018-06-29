@@ -9,8 +9,33 @@ var callback = NebPay.config.testnetUrl;
 var GasToNas = 1e18;
 
 
+function toggle(el, className) {
+  if (el.classList) {
+    el.classList.toggle(className);
+  } else {
+    var classes = el.className.split(' ');
+    var existingIndex = classes.indexOf(className);
+
+    if (existingIndex >= 0)
+      classes.splice(existingIndex, 1);
+    else
+      classes.push(className);
+
+    el.className = classes.join(' ');
+  }
+}
+
+// 显示/隐藏 帮助页面
+function toggleLoading() {
+  var el = document.getElementById("loading");
+  var className = "hidden";
+  toggle(el, className);
+}
+
 // 发起挑战
 function joinChallenge() {
+  toggleLoading();
+  
   var moneyInput = document.getElementById("moneyInput").value;
   gameId = document.getElementById("gameId").value;
   var to = contractAdress;
@@ -52,6 +77,8 @@ function intervalQuery() {
         var nickname = document.getElementById("nicknameInput").value;
         
         console.log('walletAddress', walletAddress, parseFloat(value) / GasToNas, nickname, gameId);
+        
+        toggleLoading();
         
         axios.post("/game/join", {
           "gameId": gameId,

@@ -16,6 +16,7 @@
     "koa-static": "^5.0.0",
     "koa-static-cache": "^5.1.2",
     "mysql2": "^1.5.3",
+    "nebulas": "^0.5.2",
     "sequelize": "^4.37.10"
   }
 }

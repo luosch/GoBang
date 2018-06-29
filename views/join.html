@@ -10,7 +10,7 @@
 
 <div id="main">
   <div class="bg"></div>
-  <button id="close"></button>
+  <!-- <button id="close"></button> -->
   <div id="content">
     <p id="gameInfo"><span><%= game.blackNickName %></span>向你发起了NAS五子棋挑战</p>
     <input type="text" placeholder="我的昵称" id="nicknameInput">
@@ -21,6 +21,10 @@
     <button id="acceptChallenge">接受挑战</button>
     <p id="acceptChallengeInfo">挑战者已支付对战金额，您需支付同等对战金额后方可进入游戏对战，对战双方中获胜者获得全部对战金额</p>
     <input type="hidden" id="gameId" value=<%= game.gameId %>>
+  </div>
+
+  <div id="loading" class="hidden">
+    <p>支付中，请不要离开此页面</p>
   </div>
 </div>
 

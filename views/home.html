@@ -36,6 +36,17 @@
 </div>
 
 <div id="challengeInfo" class="hidden">
+  <% if (game) { %>
+  <input type="hidden" id="gameId" value=<%= game.gameId %>>
+  <div class="bg"></div>
+  <button id="closeChallengeInfo"></button>
+    <div id="challengeContent">
+      <h3 id="unTitle">你还有未完成对战</h3>
+      <button id="enterGame">进入游戏</button>
+      <button id="cancelGame">取消游戏</button>
+    </div>
+  </div>
+  <% } else { %>
   <div class="bg"></div>
   <button id="closeChallengeInfo"></button>
   <div id="challengeContent">
@@ -48,6 +59,7 @@
     <button id="submitChallenge">发起挑战</button>
     <p id="submitChallengeInfo">应战好友接受挑战并支付同样对战金额后进入游戏对战，对战双方中获胜者获得全部对战金额</p>
   </div>
+  <% } %>
 </div>
 
 <script src="/js/axios.min.js"></script>

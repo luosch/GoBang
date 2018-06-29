@@ -1,9 +1,52 @@
 const Router = require('koa-router');
 const Game = require('../models/models').Game;
+
+const Nebulas = require("nebulas");
+const Neb = Nebulas.Neb;
+const neb = new Neb();
+neb.setRequest(new Nebulas.HttpRequest("https://testnet.nebulas.io"));
+
+
 let router = Router();
 
 router.get('/', async (ctx, next) => {
-  await ctx.render('home');
+   neb.api.getAccountState("n1bCyxrgedZ9BG9NEnmLSYpcvYzofrhMsjE").then(function (state) {
+     console.log(state);
+ }).catch(function (err) {
+     console.log(err);
+ });
+ 
+  let blackGames = await Game.findAll({ 
+    where: { 
+      blackId: ctx.session.userId,
+      status: [1, 2]
+    }
+  });
+
+  if (blackGames.length > 0) {
+    await ctx.render('home', {
+      game: blackGames[0]
+    });
+    return;
+  }
+
+  let whiteGames = await Game.findAll({ 
+    where: { 
+      whiteId: ctx.session.userId,
+      status: [1, 2]
+    }
+  });
+
+  if (whiteGames.length > 0) {
+    await ctx.render('home', {
+      game: whiteGames[0]
+    });
+    return;
+  }
+
+  await ctx.render('home', {
+    game: null
+  });
 });
 
 router.get('/invate', async (ctx, next) => {

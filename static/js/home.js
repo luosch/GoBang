@@ -65,7 +65,6 @@ function issueChallenge() {
   }, 1000 * 10);
 }
 
-
 function intervalQuery() {   
   // queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
   nebPay.queryPayInfo(serialNumber, {
@@ -108,6 +107,11 @@ function intervalQuery() {
   });
 }
 
+function enterGame() {
+  var gameId = document.getElementById("gameId").value;
+  window.location.href = "/match/"+gameId;
+}
+
 window.onload = function () {
   document.getElementById("help").addEventListener("click", toggleHelpInfo);
   document.getElementById("closeHelpInfo").addEventListener("click", toggleHelpInfo);
@@ -115,5 +119,11 @@ window.onload = function () {
   document.getElementById("challenge").addEventListener("click", toggleChallengeInfo);
   document.getElementById("closeChallengeInfo").addEventListener("click", toggleChallengeInfo);
 
-  document.getElementById("submitChallenge").addEventListener("click", issueChallenge);
+  if (document.getElementById("submitChallenge")) {
+    document.getElementById("submitChallenge").addEventListener("click", issueChallenge);  
+  }
+
+  if (document.getElementById("enterGame")) {
+    document.getElementById("enterGame").addEventListener("click", enterGame);  
+  }
 }
