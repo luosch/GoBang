@@ -24,6 +24,13 @@ function toggle(el, className) {
   }
 }
 
+// 显示/隐藏 加载页面
+function toggleLoading() {
+  var el = document.getElementById("loading");
+  var className = "hidden";
+  toggle(el, className);
+}
+
 // 显示/隐藏 帮助页面
 function toggleHelpInfo() {
   var el = document.getElementById("helpInfo");
@@ -40,6 +47,8 @@ function toggleChallengeInfo() {
 
 // 发起挑战
 function issueChallenge() {
+  toggleLoading();
+
   var moneyInput = document.getElementById("moneyInput").value;
   var nickname = document.getElementById("nicknameInput").value;
   gameId = md5(nickname+Date.now());
@@ -82,6 +91,7 @@ function intervalQuery() {
         var nickname = document.getElementById("nicknameInput").value;
         
         console.log('walletAddress', walletAddress, parseFloat(value) / GasToNas, nickname, gameId);
+        toggleLoading();
         
         axios.post("/game/add", {
           "gameId": gameId,
