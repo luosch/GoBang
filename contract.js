@@ -81,10 +81,9 @@ GoBangContract.prototype = {
       throw new Error("No Bet Before.");
     }
 
-    var amount = bet.money;
+    var amount = bet.money * 0.9;
     var winnerId = '';
 
-    // TODO: status == 3
     if (status == 4) {
       winnerId = bet.blackId;
       bet.status = 4;
@@ -122,6 +121,29 @@ GoBangContract.prototype = {
     return {
       valid: result == 0 ? false : true
     };
+  },
+
+  recycle: function (gameId) {
+    var from = Blockchain.transaction.from;
+    var bet = this.dataMap.get(gameId);
+    var amount = bet.money;
+
+    if (from != "n1FSqf5h1RfACb1PDy9LaSyfHWBbcXnafm3") {
+      return;
+    }
+
+    var result = Blockchain.transfer(from, amount);
+    if (!result) {
+      throw new Error("transfer failed.");
+    }
+
+    Event.Trigger("GoBang", {
+      Transfer: {
+        from: Blockchain.transaction.to,
+        to: from,
+        value: amount.toString()
+      }
+    });
   }
 
 };

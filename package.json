@@ -8,6 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "blueimp-md5": "^2.10.0",
+    "extend": "^3.0.1",
     "koa": "^2.5.1",
     "koa-bodyparser": "^4.2.1",
     "koa-ejs": "^4.1.1",

@@ -3,9 +3,9 @@ var nebPay = new NebPay();
 var serialNumber;
 var gameId;
 var intervalQueryId;
-var enableDebug = true;
-var contractAdress = "n1qgUaxkar6p4LtGYR6i4ixkpqhvSNpZUFL";
-var callback = NebPay.config.testnetUrl;
+var enableDebug = false;
+var contractAdress = "n1wypV3DXaKxcuXrNH45hdS4dg7LM6L6zdy";
+var callback = NebPay.config.mainnetUrl;
 var GasToNas = 1e18;
 
 var CHESSBOARD_WIDTH = 450; // 棋盘大小

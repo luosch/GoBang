@@ -1,21 +1,16 @@
 const Router = require('koa-router');
 const Game = require('../models/models').Game;
 
-const Nebulas = require("nebulas");
-const Neb = Nebulas.Neb;
-const neb = new Neb();
-neb.setRequest(new Nebulas.HttpRequest("https://testnet.nebulas.io"));
-
+// const Nebulas = require("nebulas");
+// const Neb = Nebulas.Neb;
+// const neb = new Neb();
+// neb.setRequest(new Nebulas.HttpRequest("https://testnet.nebulas.io"));
+// let Account = Nebulas.Account;
+// const keystore = '{"address":"n1FSqf5h1RfACb1PDy9LaSyfHWBbcXnafm3","crypto":{"cipher":"aes-128-ctr","ciphertext":"95fa1a0d82f35bcf7db986b5341b4f41635fb59cfc26c1afb54daa643b77631b","cipherparams":{"iv":"27e48daedc63d6670e450d03e114fcd9"},"kdf":"scrypt","kdfparams":{"dklen":32,"n":4096,"p":1,"r":8,"salt":"565a6f3d64985a997dffab7e8faade1177250d88541dcc00ff4edf85c04c887c"},"mac":"d156c12a756d19eac59e04c4230e3ab3aff425a439528f95ba5c06adc546b721","machash":"sha3256"},"id":"2cd10cb9-93fc-42f2-9ef9-7b0f57d33f86","version":4}'
 
 let router = Router();
 
 router.get('/', async (ctx, next) => {
-   neb.api.getAccountState("n1bCyxrgedZ9BG9NEnmLSYpcvYzofrhMsjE").then(function (state) {
-     console.log(state);
- }).catch(function (err) {
-     console.log(err);
- });
- 
   let blackGames = await Game.findAll({ 
     where: { 
       blackId: ctx.session.userId,
