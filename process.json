@@ -1,0 +1,12 @@
+{
+    "name": "GoBang",
+    "script": "./app.js",
+    "cwd": "./",
+    "error_file": "./logs/app-err.log",
+    "out_file": "./logs/app-out.log",
+    "instances" : "max",
+    "exec_mode" : "cluster",
+    "env": {
+		"NODE_ENV": "production"
+	}
+}

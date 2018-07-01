@@ -5,7 +5,7 @@ module.exports = {
     host: '127.0.0.1',
     database: 'GoBang',
     username: 'root',
-    password: '',
+    password: '123456',
     dialect: 'mysql',
     port: 3306,
     pool: {
