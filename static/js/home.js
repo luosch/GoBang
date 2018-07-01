@@ -69,7 +69,7 @@ function intervalQuery() {
   // queryPayInfo的options参数用来指定查询交易的服务器地址,(如果是主网可以忽略,因为默认服务器是在主网查询)
   nebPay.queryPayInfo(serialNumber, {
     debug: enableDebug,
-    callback: NebPay.config.testnetUrl //在测试网查询
+    callback: callback //在测试网查询
   })
   .then(function (resp) {
     //resp is a JSON string
